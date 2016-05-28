@@ -5,4 +5,10 @@
         "http://struts.apache.org/dtds/struts-2.3.dtd">
 
 <struts>
+    <package name="co.lilpilot.action" extends="struts-default">
+        <action name="loginAction" class="loginAction" method="checkLogin">
+            <result name="success">/blog.html</result>
+            <result name="input">/login.html</result>
+        </action>
+    </package>
 </struts>
