@@ -7,7 +7,7 @@
 <struts>
     <package name="co.lilpilot.action" extends="struts-default">
         <action name="loginAction" class="loginAction" method="checkLogin">
-            <result name="success">/blog.html</result>
+            <result name="success">/admin-index.html</result>
             <result name="input">/login.html</result>
         </action>
     </package>
