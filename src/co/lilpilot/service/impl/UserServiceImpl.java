@@ -25,8 +25,6 @@ public class UserServiceImpl extends BaseServiceImpl<TbUserEntity> implements Us
     @Override
     public boolean verifyUser(TbUserEntity user) {
         TbUserEntity origin = userDAO.findByName(user.getName());
-        System.out.println(origin.getName());
-        System.out.println(origin.getPassword());
         return origin.getPassword().equals(user.getPassword());
     }
 }

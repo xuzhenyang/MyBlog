@@ -4,12 +4,29 @@
        xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
+    <!-- 定义数据库连接池数据源bean destroy-method="close"的作用是当数据库连接不使用的时候,就把该连接重新放到数据池中,方便下次使用调用 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+          destroy-method="close">
+        <!-- 设置JDBC驱动名称 -->
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
+        <!-- 设置JDBC连接URL -->
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/myblog" />
+        <!-- 设置数据库用户名 -->
+        <property name="user" value="root" />
+        <!-- 设置数据库密码 -->
+        <property name="password" value="zucc" />
+        <!-- 设置连接池初始值 -->
+        <property name="initialPoolSize" value="5" />
+    </bean>
+
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="annotatedClasses">
             <list>
                 <value>co.lilpilot.model.TbUserEntity</value>
             </list>
         </property>
+        <!-- 数据源 -->
+        <property name="dataSource" ref="dataSource" />
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/myblog</prop>
@@ -17,9 +34,9 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
                 <prop key="hibernate.connection.username">root</prop>
                 <prop key="hibernate.connection.password">zucc</prop>
-                <prop key="hibernate.current_session_context_class">thread</prop>
+                <!--<prop key="hibernate.current_session_context_class">thread</prop>-->
                 <!--<prop key="hibernate.current_session_context_class">-->
-                <!--org.springframework.orm.hibernate4.SpringSessionContext-->
+                    <!--org.springframework.orm.hibernate4.SpringSessionContext-->
                 <!--</prop>-->
                 <!--<prop key="hibernate.show_sql">true</prop>-->
                 <!--<prop key="hibernate.c3p0.min_size">5</prop>-->
@@ -30,27 +47,29 @@
         </property>
     </bean>
 
-    <!--<bean id="dataSource"-->
-    <!--class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
-    <!--</bean>-->
-    <!--<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">-->
-    <!--<property name="sessionFactory" ref="sessionFactory"/>-->
-    <!--<property name="dataSource" ref="dataSource"/>-->
-    <!--</bean>-->
-    <!--<bean id="persistenceExceptionTranslationPostProcessor"-->
-    <!--class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>-->
-    <!--<tx:advice id="txAdvice" transaction-manager="transactionManager">-->
-    <!--<tx:attributes>-->
-    <!--<tx:method name="add*" propagation="REQUIRED"/>-->
-    <!--<tx:method name="del*" propagation="REQUIRED"/>-->
-    <!--<tx:method name="modify*" propagation="REQUIRED"/>-->
-    <!--<tx:method name="*" read-only="true"/>-->
-    <!--</tx:attributes>-->
-    <!--</tx:advice>-->
-    <!--<aop:config expose-proxy="true">-->
-    <!--<aop:pointcut id="txPointcut" expression="execution(* co.lilpilot.service.impl..*.*(..))"/>-->
-    <!--<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>-->
-    <!--</aop:config>-->
+    <!-- 配置事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+
+
+    <!-- 配置事务的传播特性 -->
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="del*" propagation="REQUIRED"/>
+            <tx:method name="modify*" propagation="REQUIRED"/>
+            <tx:method name="*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 哪些类的哪些方法参与事务 -->
+    <aop:config proxy-target-class="true">
+        <aop:advisor  pointcut="execution(* co.lilpilot.service..*.*(..))" advice-ref="txAdvice"/>
+    </aop:config>
 
     <bean id="userDAO" class="co.lilpilot.dao.impl.UserDAOImpl">
         <property name="sessionFactory" ref="sessionFactory"/>

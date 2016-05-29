@@ -58,7 +58,8 @@ public class BaseDAOImpl<T> implements BaseDAO<T> {
      */
     protected Session getSession() {
         System.out.println("session ==== " + sessionFactory);
-        return this.sessionFactory.openSession();
+        return this.sessionFactory.getCurrentSession();
+//        return this.sessionFactory.openSession();
     }
 
     public void save(T entity) {
