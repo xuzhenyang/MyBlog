@@ -61,5 +61,6 @@
     <orderEntry type="library" name="org.apache.struts:struts2-spring-plugin:Release" level="project" />
     <orderEntry type="library" name="org.aspectj:aspectjweaver:1.8.9" level="project" />
     <orderEntry type="library" name="com.mchange:c3p0:0.9.5.2" level="project" />
+    <orderEntry type="library" name="org.springframework:spring-test:4.2.6.RELEASE" level="project" />
   </component>
 </module>

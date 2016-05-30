@@ -17,6 +17,7 @@
           <element id="library" level="project" name="org.apache.struts:struts2-spring-plugin:Release" />
           <element id="library" level="project" name="org.aspectj:aspectjweaver:1.8.9" />
           <element id="library" level="project" name="com.mchange:c3p0:0.9.5.2" />
+          <element id="library" level="project" name="org.springframework:spring-test:4.2.6.RELEASE" />
         </element>
       </element>
     </root>

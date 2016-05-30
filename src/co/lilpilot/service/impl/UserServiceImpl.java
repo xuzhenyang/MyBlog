@@ -12,7 +12,7 @@ import javax.annotation.Resource;
  */
 @Transactional
 public class UserServiceImpl extends BaseServiceImpl<TbUserEntity> implements UserService {
-    UserDAO userDAO;
+    private UserDAO userDAO;
 
     public UserDAO getUserDAO() {
         return userDAO;

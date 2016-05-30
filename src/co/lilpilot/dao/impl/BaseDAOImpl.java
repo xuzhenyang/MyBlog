@@ -43,12 +43,12 @@ public class BaseDAOImpl<T> implements BaseDAO<T> {
     }
 
     public void setSessionFactory(SessionFactory sessionFactory) {
-        System.out.println("注入SessionFactory.............");
+        System.out.println("inject SessionFactory.............");
         if (sessionFactory == null) {
-            System.out.println("注入的SessionFactory为空.............");
+            System.out.println("injected SessionFactory is null.............");
         } else {
-            System.out.println("注入的SessionFactory不为空.............");
-            System.out.println("注入的SessionFactory：" + sessionFactory.getClass().getName());
+            System.out.println("injected SessionFactory isn't null.............");
+            System.out.println("injected SessionFactory：" + sessionFactory.getClass().getName());
         }
         this.sessionFactory = sessionFactory;
     }

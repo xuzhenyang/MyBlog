@@ -34,7 +34,8 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
                 <prop key="hibernate.connection.username">root</prop>
                 <prop key="hibernate.connection.password">zucc</prop>
-                <!--<prop key="hibernate.current_session_context_class">thread</prop>-->
+                <!--不要用Thread 因为當把事務交由Spring托管時，事務就不是以thread的方式運作了，而是以Spring自已的上下文方式運作-->
+                <prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop>
                 <!--<prop key="hibernate.current_session_context_class">-->
                     <!--org.springframework.orm.hibernate4.SpringSessionContext-->
                 <!--</prop>-->
@@ -62,12 +63,13 @@
             <tx:method name="add*" propagation="REQUIRED"/>
             <tx:method name="del*" propagation="REQUIRED"/>
             <tx:method name="modify*" propagation="REQUIRED"/>
-            <tx:method name="*" read-only="true"/>
+            <tx:method name="*" read-only="true" propagation="REQUIRED"/>
         </tx:attributes>
     </tx:advice>
 
     <!-- 哪些类的哪些方法参与事务 -->
     <aop:config proxy-target-class="true">
+        <!--<aop:advisor  pointcut="execution(* co.lilpilot.dao..*.*(..))" advice-ref="txAdvice"/>-->
         <aop:advisor  pointcut="execution(* co.lilpilot.service..*.*(..))" advice-ref="txAdvice"/>
     </aop:config>
 
