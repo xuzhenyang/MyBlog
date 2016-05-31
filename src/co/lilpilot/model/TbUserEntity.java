@@ -1,6 +1,7 @@
 package co.lilpilot.model;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Created by xuzywozz on 2016/5/23.
@@ -14,6 +15,7 @@ public class TbUserEntity {
     private String access;
     private String status;
     private String remark;
+    private Collection<TbLogEntity> tbLogsByUserId;
 
     @Id
     @Column(name = "user_id", nullable = false)
@@ -101,5 +103,14 @@ public class TbUserEntity {
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (remark != null ? remark.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "tbUserByUserId")
+    public Collection<TbLogEntity> getTbLogsByUserId() {
+        return tbLogsByUserId;
+    }
+
+    public void setTbLogsByUserId(Collection<TbLogEntity> tbLogsByUserId) {
+        this.tbLogsByUserId = tbLogsByUserId;
     }
 }
